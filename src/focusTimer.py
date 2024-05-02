@@ -283,6 +283,9 @@ class FocusTimerApp:
     #     messagebox.showinfo("Time's up!", "Time's up! Your break is over. Get back to work!")
 
     def show_popup(self):
+        # Set the root window as topmost
+        self.root.attributes('-topmost', True)
+        
         popup = tk.Toplevel(self.root)
         popup.title("Time's up!")
         popup.geometry("300x100")
@@ -292,9 +295,13 @@ class FocusTimerApp:
         popup.focus_set()  # Set focus to the popup window
         popup.grab_set()   # Grab the focus so the user cannot interact with other windows
         popup.transient(self.root)  # Set the popup window as transient to the main window
-        popup.attributes('-topmost', 'true')  # Make the popup window appear on top
-        popup_button = tk.Button(popup, text="OK", command=popup.destroy, bg="#333", fg="white")
+        popup_button = tk.Button(popup, text="OK", command=lambda: self.close_popup(popup), bg="#333", fg="white")
         popup_button.pack(pady=10)
+
+    def close_popup(self, popup):
+        # Set the root window back to its original state
+        self.root.attributes('-topmost', False)
+        popup.destroy()
 
     def update_window_title(self, page):
         if "| Focus Timer" in page:
